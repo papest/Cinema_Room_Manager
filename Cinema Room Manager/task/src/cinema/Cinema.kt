@@ -30,23 +30,6 @@ fun createCinemaHall() {
     bigHall = numberOfRaws * numberOfSeats > MAX_SEATS_FOR_FIRST_ALGORITHM
 }
 
-fun calculateProfit() {
-
-    println("Enter the number of rows:")
-    numberOfRaws = readln().toInt()
-    println("Enter the number of seats in each row:")
-    numberOfSeats = readln().toInt()
-    val totalIncome = if (!bigHall) {
-        numberOfRaws * numberOfSeats * PRICE
-    } else {
-        numberOfSeats * (numberOfRaws / 2 * FIRST_PRICE + (numberOfRaws / 2 + numberOfRaws % 2) * SECOND_PRICE)
-    }
-    println(
-        """Total income:
-${'$'}$totalIncome"""
-    )
-}
-
 fun bookSeat() {
     cinemaHall[currentRaw - 1][currentSeat - 1] = 'B'
 }
@@ -61,6 +44,34 @@ fun ticketPrice(): Int {
     }
 }
 
+fun buyTicket() {
+    println("Enter a row number:")
+    currentRaw = readln().toInt()
+    println("Enter a seat number in that row:")
+    currentSeat = readln().toInt()
+    println("Ticket price: $${ticketPrice()}")
+    bookSeat()
+}
+
+fun menu(): Boolean {
+    println(
+        """1. Show the seats
+2. Buy a ticket
+0. Exit"""
+    )
+    return when (readln().toInt()) {
+        1 -> {
+            arrangementOut()
+            true
+        }
+        2 -> {
+            buyTicket()
+            true
+        }
+        else -> false
+    }
+}
+
 fun main() {
 
     println("Enter the number of rows:")
@@ -69,13 +80,11 @@ fun main() {
     numberOfSeats = readln().toInt()
     createCinemaHall()
     arrangementOut()
-    println("Enter a row number:")
-    currentRaw = readln().toInt()
-    println("Enter a seat number in that row:")
-    currentSeat = readln().toInt()
-    println("Ticket price: $${ticketPrice()}")
-    bookSeat()
-    arrangementOut()
+    var cycle = menu()
+    while (cycle) {
+        cycle = menu()
+    }
+
 
 }
 
